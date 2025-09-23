@@ -7,4 +7,4 @@
 を可能とします。
 
 技術構成:
-![image](https://gyazo.com/3890b071d6fe303e702db42360e01b96)
+![image](https://drive.google.com/file/d/1xkfpwDKfediX-rqKCX6HdxKbbfiLuu--/view?usp=drive_link)
