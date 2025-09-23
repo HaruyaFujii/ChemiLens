@@ -1,0 +1,135 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+
+# Node dependencies
+/node_modules
+/backend/node_modules
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# 環境変数
+.env
+*.env
+.env.*
+
+# Firebase設定ファイル（APIキーを含む）
+**/ios/Runner/GoogleService-Info.plist
+**/android/app/google-services.json
+**/macos/Runner/GoogleService-Info.plist
+# lib/firebase_options.dart  # Vercelデプロイ用にコメントアウト
+
+# その他のAPIキー
+**/api_keys/
+**/secrets/
+openai_api_key.txt
+config.dart
+
+# Flutter関連の一時ファイル
+.flutter-plugins-dependencies
+.flutter-plugins
+.packages
+.metadata
+
+# Xcode関連
+**/ios/Podfile.lock
+**/ios/Pods/
+**/ios/Runner.xcworkspace/xcshareddata/
+**/ios/.symlinks/
+
+# Xcodeユーザー固有ファイル（除外）
+**/ios/**/*.xcuserdata/
+**/ios/**/*.pbxuser
+**/ios/**/*.mode1v3
+**/ios/**/*.mode2v3
+**/ios/**/*.perspectivev3
+**/ios/**/xcuserdata/
+**/ios/**/DerivedData/
+
+# プロジェクトファイルは含める（コメント）
+# project.pbxproj と Info.plist は必須なので除外しない
+# これらはビルド設定とプロジェクト構造に必要
+
+# 環境固有の設定ファイル（各開発者が個別に設定）
+**/ios/Environment.xcconfig
+
+# Android関連
+**/android/.gradle/
+**/android/captures/
+**/android/gradlew
+**/android/gradlew.bat
+**/android/local.properties
+**/android/**/GeneratedPluginRegistrant.*
+
+# Web関連
+**/web/icons/
+**/web/manifest.json
+
+## 不要なマークダウン
+*.md
+!README.md
+
+# FVM Version Cache
+.fvm/
+
+# Flutter ephemeral files (自動生成される一時ファイル)
+**/Flutter/ephemeral/
+**/Flutter/Generated.xcconfig
+**/flutter/ephemeral/
+**/flutter_export_environment.sh
+
+# Flutter plugin registrant files (自動生成されるプラグイン登録ファイル)
+**/generated_plugin_registrant.*
+**/GeneratedPluginRegistrant.*
+**/flutter/generated_plugin_registrant.h
+**/flutter/generated_plugin_registrant.cc
+**/Flutter/GeneratedPluginRegistrant.h
+**/Flutter/GeneratedPluginRegistrant.m
+**/Flutter/GeneratedPluginRegistrant.swift
+**/generated_plugins.cmake
+
+# Code generation files (コード生成ファイル)
+# *.g.dart  # Vercelデプロイ用にコメントアウト
+# *.freezed.dart  # Vercelデプロイ用にコメントアウト
+*.config.dart
+*.part.dart

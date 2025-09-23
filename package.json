@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "vercel-build": "bash ./build.sh"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2"
+  },
+  "dependencies": {
+    "firebase-tools": "^14.17.0"
+  }
+}
