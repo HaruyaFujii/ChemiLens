@@ -1,17 +1,10 @@
-# 25 プリングルス
+# EGH用プロジェクト 「ChemiLens」
 
-このリポジトリはハッカソン提出用の雛形です。以下の項目をすべて埋めてください。
+化学を勉強しはじめている小中学生に向けた化学をより日常的に感じることができるようにするWebアプリケーション:
+1. 身近なものを撮影
+2. 3Dモデルで視覚化
+3. ゲーム感覚で学習
+を可能とします。
 
----
-
-## チーム情報
-- チーム番号: 25
-- チーム名: プリングルス
-- プロダクト名: ChemiLens
-- メンバー: @r-sei @HaruyaFujii @otoka34 @ShuutoSakai
-
----
-
-## デモ　/ プレゼン資料
-- デモURL: 
-- プレゼンURL：https://docs.google.com/presentation/d/1xktWpMcLTVfbuUH-7l0PBTnW63hFembZe00ITWrRFtk/edit?slide=id.p#slide=id.p
+技術構成:
+![image](https://gyazo.com/3890b071d6fe303e702db42360e01b96)
