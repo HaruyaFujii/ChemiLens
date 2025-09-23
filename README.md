@@ -7,4 +7,4 @@
 を可能とします。
 
 技術構成:
-![image](https://drive.google.com/file/d/1xkfpwDKfediX-rqKCX6HdxKbbfiLuu--/view?usp=drive_link)
+![image](https://github.com/HaruyaFujii/ChemiLens/blob/c203e3588a3f861321da1ba1dc98a7e4febce37f/ChemiLens_tech.png)
