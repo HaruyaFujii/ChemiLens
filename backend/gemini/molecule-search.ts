@@ -6,7 +6,7 @@ const genAI = new GoogleGenerativeAI(apiKey!);
 // 分子式から分子名を取得する関数
 export async function getMoleculeNameFromFormula(formula: string) {
     try {
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
         const prompt = `
             あなたは化学の専門家です。

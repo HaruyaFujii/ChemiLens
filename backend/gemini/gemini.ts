@@ -12,7 +12,7 @@ const genAI = new GoogleGenerativeAI(apiKey);
  */
 
 export async function analyzeImage(imageBuffer: Buffer, mimeType: string): Promise<Result | null> {
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
     const prompt = `
         Analyze the provided image.
@@ -30,7 +30,7 @@ export async function analyzeImage(imageBuffer: Buffer, mimeType: string): Promi
           ]
         }
         Only return the JSON object, with no other text or markdown formatting.
-        In "description" and "confidence" section, you must write them in japanese.
+        In "description" section, you must write them in japanese.
     `;
 
     const imagePart = {

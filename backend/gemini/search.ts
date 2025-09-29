@@ -5,7 +5,7 @@ const genAI = new GoogleGenerativeAI(apiKey);
 
 export async function searchCompoundsByElement(element: string) {
     try {
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
         // プロンプト：小学生向けに「その元素を含む身近な物体」を返してもらう
         const prompt = `
