@@ -35,7 +35,7 @@ class _MoleculeBuilderScreenState extends ConsumerState<MoleculeBuilderScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CommonAppBar(
-        showBackButton: true,
+        showBackButton: false,
         navigateToHistoryOnTap: false,
       ),
       body: Stack(
