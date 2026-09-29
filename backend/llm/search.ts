@@ -1,4 +1,4 @@
-import { chat, TEXT_MODEL } from "./zhipu.js";
+import { chat } from "./zhipu.js";
 
 export async function searchCompoundsByElement(element: string) {
     try {
@@ -14,7 +14,7 @@ export async function searchCompoundsByElement(element: string) {
             ]
         `;
 
-        let text = await chat(TEXT_MODEL, [{ role: "user", content: prompt }]);
+        let text = await chat("text", [{ role: "user", content: prompt }]);
 
         // LLM のレスポンスからJSON部分を抽出する
         // ```json ... ``` のようなマークダウン形式に対応

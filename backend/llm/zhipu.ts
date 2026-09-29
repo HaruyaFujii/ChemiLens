@@ -1,11 +1,39 @@
-// 智谱AI (Zhipu) の OpenAI 互換 Chat Completions API を呼び出すクライアント
+// 智谱AI (Zhipu) / Z.ai の OpenAI 互換 Chat Completions API を呼び出すクライアント
 // Gemini API が利用できなくなったため、無料モデルの GLM に移行した
+//
+// 環境変数に設定されたキーで接続先を切り替える
+// - ZAI_API_KEY   : Z.ai（国際版, https://z.ai）
+// - ZHIPU_API_KEY : 智谱AI開放平台（中国版, https://bigmodel.cn）
 
-const ENDPOINT = "https://open.bigmodel.cn/api/paas/v4/chat/completions";
+type Provider = {
+    endpoint: string;
+    apiKey: string;
+    visionModel: string;
+    textModel: string;
+};
 
-// 無料モデル
-export const VISION_MODEL = "glm-4.6v-flash";
-export const TEXT_MODEL = "glm-4-flash-250414";
+// いずれも無料モデル
+function getProvider(): Provider {
+    if (process.env.ZAI_API_KEY) {
+        return {
+            endpoint: "https://api.z.ai/api/paas/v4/chat/completions",
+            apiKey: process.env.ZAI_API_KEY,
+            visionModel: "glm-4.6v-flash",
+            textModel: "glm-4.5-flash",
+        };
+    }
+    if (process.env.ZHIPU_API_KEY) {
+        return {
+            endpoint: "https://open.bigmodel.cn/api/paas/v4/chat/completions",
+            apiKey: process.env.ZHIPU_API_KEY,
+            visionModel: "glm-4.6v-flash",
+            textModel: "glm-4-flash-250414",
+        };
+    }
+    throw new Error("ZAI_API_KEY or ZHIPU_API_KEY is not set");
+}
+
+export type ModelKind = "vision" | "text";
 
 type ContentPart =
     | { type: "text"; text: string }
@@ -16,29 +44,27 @@ type Message = {
     content: string | ContentPart[];
 };
 
-export async function chat(model: string, messages: Message[]): Promise<string> {
-    const apiKey = process.env.ZHIPU_API_KEY;
-    if (!apiKey) {
-        throw new Error("ZHIPU_API_KEY is not set");
-    }
+export async function chat(kind: ModelKind, messages: Message[]): Promise<string> {
+    const provider = getProvider();
+    const model = kind === "vision" ? provider.visionModel : provider.textModel;
 
     const body: Record<string, unknown> = { model, messages, temperature: 0.3 };
-    if (model === VISION_MODEL) {
-        // 思考モードを切って応答を速くする
+    if (model !== "glm-4-flash-250414") {
+        // 思考モードを切って応答を速くする（glm-4-flash-250414 は思考モード非対応）
         body.thinking = { type: "disabled" };
     }
 
-    const res = await fetch(ENDPOINT, {
+    const res = await fetch(provider.endpoint, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${apiKey}`,
+            Authorization: `Bearer ${provider.apiKey}`,
         },
         body: JSON.stringify(body),
     });
 
     if (!res.ok) {
-        throw new Error(`Zhipu API error ${res.status}: ${await res.text()}`);
+        throw new Error(`GLM API error ${res.status}: ${await res.text()}`);
     }
 
     const data = (await res.json()) as {

@@ -1,5 +1,5 @@
 import type { Result } from "../types/types.js";
-import { chat, VISION_MODEL } from "./zhipu.js";
+import { chat } from "./zhipu.js";
 
 /**
  * 画像を分析し、写っている物体とそれに含まれる分子を特定する
@@ -31,7 +31,7 @@ export async function analyzeImage(imageBuffer: Buffer, mimeType: string): Promi
     const imageUrl = `data:${mimeType};base64,${imageBuffer.toString("base64")}`;
 
     try {
-        const text = await chat(VISION_MODEL, [
+        const text = await chat("vision", [
             {
                 role: "user",
                 content: [

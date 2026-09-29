@@ -1,4 +1,4 @@
-import { chat, TEXT_MODEL } from "./zhipu.js";
+import { chat } from "./zhipu.js";
 
 // 分子式から分子名を取得する関数
 export async function getMoleculeNameFromFormula(formula: string) {
@@ -30,7 +30,7 @@ export async function getMoleculeNameFromFormula(formula: string) {
             複数の候補がある場合は、最も一般的な化合物を最大3つまで返してください。
         `;
 
-        let text = await chat(TEXT_MODEL, [{ role: "user", content: prompt }]);
+        let text = await chat("text", [{ role: "user", content: prompt }]);
 
         // JSONマークダウンの除去
         const jsonMatch = text.match(/```json\n([\s\S]*?)\n```/);
