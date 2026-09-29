@@ -1,8 +1,5 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import type { Result } from "../types/types.js";
-
-const apiKey = process.env.GEMINI_API_KEY!;
-const genAI = new GoogleGenerativeAI(apiKey);
+import { chat } from "./zhipu.js";
 
 /**
  * 画像を分析し、写っている物体とそれに含まれる分子を特定する
@@ -12,8 +9,6 @@ const genAI = new GoogleGenerativeAI(apiKey);
  */
 
 export async function analyzeImage(imageBuffer: Buffer, mimeType: string): Promise<Result | null> {
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-
     const prompt = `
         Analyze the provided image.
         1. Identify the main object in the image.
@@ -33,22 +28,23 @@ export async function analyzeImage(imageBuffer: Buffer, mimeType: string): Promi
         In "description" section, you must write them in japanese.
     `;
 
-    const imagePart = {
-        inlineData: {
-            data: imageBuffer.toString("base64"),
-            mimeType: mimeType,
-        },
-    };
+    const imageUrl = `data:${mimeType};base64,${imageBuffer.toString("base64")}`;
 
     try {
-        const result = await model.generateContent([prompt, imagePart]);
-        const response = result.response;
-        const text = response.text();
+        const text = await chat("vision", [
+            {
+                role: "user",
+                content: [
+                    { type: "image_url", image_url: { url: imageUrl } },
+                    { type: "text", text: prompt },
+                ],
+            },
+        ]);
 
         // クリーンなJSONを抽出
         const jsonMatch = text.match(/\{.*\}/s);
         if (!jsonMatch) {
-            console.error("No JSON object found in Gemini response:", text);
+            console.error("No JSON object found in LLM response:", text);
             return null;
         }
 
@@ -56,7 +52,7 @@ export async function analyzeImage(imageBuffer: Buffer, mimeType: string): Promi
         return parsed as Result;
 
     } catch (e) {
-        console.error("Failed to analyze image with Gemini", e);
+        console.error("Failed to analyze image with LLM", e);
         return null;
     }
 }

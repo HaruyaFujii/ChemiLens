@@ -2,12 +2,12 @@
 
 import express from "express";
 import multer from "multer";
-import { analyzeImage } from "./gemini/gemini.js";
+import { analyzeImage } from "./llm/analyze.js";
 import type { Result } from "./types/types.js";
 import { getMoleculeInfo } from "./pubchem/pubchem.js";
 import { convertSdfToGlb } from "./converter/converter.js";
-import { searchCompoundsByElement } from "./gemini/search.js";
-import { getMoleculeNameFromFormula } from "./gemini/molecule-search.js";
+import { searchCompoundsByElement } from "./llm/search.js";
+import { getMoleculeNameFromFormula } from "./llm/molecule-search.js";
 import { cidsToSdfs } from "./pubchem/cidtosdf.js";
 
 const app = express();
@@ -52,7 +52,7 @@ app.post("/api/analyze", upload.single("image"), async (req, res) => {
                     ...molecule,
                     cid: moleculeInfo?.cid ?? null,
                     sdf: moleculeInfo?.sdf ?? null,
-                    formula: molecule.formula || '', // Geminiから取得した分子式を追加
+                    formula: molecule.formula || '', // LLMから取得した分子式を追加
                 };
             })
         );
@@ -254,17 +254,17 @@ app.post('/api/molecule/validate-structure', async (req, res) => {
     }
 });
 
-// 分子式検索エンドポイント（Geminiのみ）
+// 分子式検索エンドポイント（LLMのみ）
 app.post('/api/molecule/search-formula', async (req, res) => {
     const { formula } = req.body;
 
     try {
-        console.log(`[Gemini] Searching for formula: ${formula}`);
+        console.log(`[LLM] Searching for formula: ${formula}`);
 
-        const geminiResult = await getMoleculeNameFromFormula(formula);
+        const llmResult = await getMoleculeNameFromFormula(formula);
 
-        if (geminiResult.found && geminiResult.compounds.length > 0) {
-            const compounds = geminiResult.compounds.map((compound: any) => ({
+        if (llmResult.found && llmResult.compounds.length > 0) {
+            const compounds = llmResult.compounds.map((compound: any) => ({
                 name: compound.name,
                 formula: compound.formula
             }));
@@ -283,7 +283,7 @@ app.post('/api/molecule/search-formula', async (req, res) => {
         }
 
     } catch (error) {
-        console.error('[Gemini error]', error);
+        console.error('[LLM error]', error);
         res.status(500).json({
             found: false,
             message: 'エラーが発生しました',
@@ -303,10 +303,10 @@ app.post('/api/molecule/get-3d-data', async (req, res) => {
     try {
         console.log(`[3D Data] Getting 3D data for formula: ${formula}`);
 
-        // 1. Geminiで分子式から化合物名（英語名）を取得
-        const geminiResult = await getMoleculeNameFromFormula(formula);
+        // 1. LLMで分子式から化合物名（英語名）を取得
+        const llmResult = await getMoleculeNameFromFormula(formula);
 
-        if (!geminiResult.found || geminiResult.compounds.length === 0) {
+        if (!llmResult.found || llmResult.compounds.length === 0) {
             return res.json({
                 success: false,
                 message: 'この分子式の化合物が見つかりませんでした',
@@ -315,7 +315,7 @@ app.post('/api/molecule/get-3d-data', async (req, res) => {
         }
 
         // 最初の化合物を使用
-        const compound = geminiResult.compounds[0];
+        const compound = llmResult.compounds[0];
         const englishName = compound.englishName;
 
         console.log(`[3D Data] Found compound: ${compound.name} (${englishName})`);

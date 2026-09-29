@@ -1,4 +1,4 @@
-// Geminiからのレスポンスの型定義
+// LLMからのレスポンスの型定義
 export interface Result {
     objectName: string;
     molecules: {

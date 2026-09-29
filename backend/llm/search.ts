@@ -1,12 +1,7 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
-const apiKey = process.env.GEMINI_API_KEY!;
-const genAI = new GoogleGenerativeAI(apiKey);
+import { chat } from "./zhipu.js";
 
 export async function searchCompoundsByElement(element: string) {
     try {
-        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-
         // プロンプト：小学生向けに「その元素を含む身近な物体」を返してもらう
         const prompt = `
             あなたは科学を子供にわかりやすく説明する先生です。
@@ -19,27 +14,32 @@ export async function searchCompoundsByElement(element: string) {
             ]
         `;
 
-        const result = await model.generateContent(prompt);
-        let text = result.response.text();
+        let text = await chat("text", [{ role: "user", content: prompt }]);
 
-        // Gemini のレスポンスからJSON部分を抽出する
+        // LLM のレスポンスからJSON部分を抽出する
         // ```json ... ``` のようなマークダウン形式に対応
         const jsonMatch = text.match(/```json\n([\s\S]*?)\n```/);
         if (jsonMatch && jsonMatch[1]) {
             text = jsonMatch[1];
         }
 
-        // Gemini のレスポンスをJSONとしてパース
+        // JSON配列以外の部分を除去
+        const arrayMatch = text.match(/\[[\s\S]*\]/);
+        if (arrayMatch) {
+            text = arrayMatch[0];
+        }
+
+        // LLM のレスポンスをJSONとしてパース
         try {
             const examples = JSON.parse(text);
             return examples;
         } catch (e) {
-            console.error("[Gemini] Failed to parse JSON response after extraction:", text);
-            throw new Error("Failed to parse response from Gemini API as JSON.");
+            console.error("[LLM] Failed to parse JSON response after extraction:", text);
+            throw new Error("Failed to parse response from LLM API as JSON.");
         }
 
     } catch (error) {
-        console.error(`[Gemini] Error while searching compounds for ${element}:`, error);
+        console.error(`[LLM] Error while searching compounds for ${element}:`, error);
         // エラーを再スローして呼び出し元で処理できるようにする
         throw error;
     }
